@@ -5,7 +5,8 @@
     "tints": [
       {
         "type": "item_tints:biome",
-        "mode": "dry_foliage"
+        "mode": "dry_foliage",
+        "fallback": [0.65, 0.52, 0.32]
       }
     ]
   }

@@ -1,5 +1,10 @@
 package com.sydist.item_tints;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.client.render.item.tint.ConstantTintSource;
+import net.minecraft.client.render.item.tint.TintSourceTypes;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.dynamic.Codecs;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.MapCodec;
@@ -11,31 +16,24 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 
-public record BiomeTintSource(BiomeTintMode mode) implements TintSource {
-    public static final MapCodec<BiomeTintSource> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> instance.group(
-                    StringIdentifiable.createCodec(BiomeTintMode::values)
-                            .fieldOf("mode")
-                            .forGetter(BiomeTintSource::mode))
-                    .apply(instance, BiomeTintSource::new));
-
-    public BiomeTintSource(BiomeTintMode mode) {
-        this.mode = mode;
-    }
+public record BiomeTintSource(BiomeTintMode mode, TintSource fallback) implements TintSource {
+    public static final MapCodec<BiomeTintSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        StringIdentifiable.createCodec(BiomeTintMode::values).fieldOf("mode").forGetter(BiomeTintSource::mode),
+        Codec.withAlternative(TintSourceTypes.CODEC, Codecs.RGB, ConstantTintSource::new).fieldOf("fallback").forGetter(BiomeTintSource::fallback)
+    ).apply(instance, BiomeTintSource::new));
 
     @Override
     public int getTint(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity user) {
         if (world == null) {
-            return -1;
+            return this.fallback.getTint(stack, world, user);
         }
 
         Entity owner = user != null ? user : stack.getHolder();
         if (owner == null) {
-            return -1;
+            return this.fallback.getTint(stack, world, user);
         }
 
         return this.getBiomeTint(mode, world, owner.getBlockPos()) | 0xFF000000;
