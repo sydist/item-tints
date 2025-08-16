@@ -5,7 +5,8 @@
     "tints": [
       {
         "type": "item_tints:biome",
-        "mode": "foliage"
+        "mode": "foliage",
+        "fallback": -12012264
       }
     ]
   }

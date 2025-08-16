@@ -5,7 +5,8 @@
     "tints": [
       {
         "type": "item_tints:biome",
-        "mode": "sugar_cane"
+        "mode": "sugar_cane",
+        "fallback": 8372786
       }
     ]
   }

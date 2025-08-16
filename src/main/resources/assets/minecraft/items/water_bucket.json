@@ -5,7 +5,8 @@
     "tints": [
       {
         "type": "item_tints:biome",
-        "mode": "bucket"
+        "mode": "bucket",
+        "fallback": [0.22, 0.37, 0.8]
       }
     ]
   }
