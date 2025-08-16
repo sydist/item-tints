@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "item_tints",
+  "version": "${version}",
+  "name": "Item Tints",
+  "description": "Items will now have biome tints just like blocks do. This includes water buckets, foliage, etc.",
+  "authors": ["sydist"],
+  "icon": "assets/item_tints/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.sydist.item_tints.ItemTints"],
+    "client": ["com.sydist.item_tints.ItemTintsClient"]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.21.5",
+    "java": ">=21"
+  },
+  "suggests": {}
+}

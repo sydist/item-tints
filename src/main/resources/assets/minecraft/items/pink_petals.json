@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/pink_petals",
+    "tints": [
+      {
+        "type": "item_tints:biome",
+        "mode": "grass"
+      }
+    ]
+  }
+}

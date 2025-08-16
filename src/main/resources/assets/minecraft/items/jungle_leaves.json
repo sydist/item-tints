@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "minecraft:block/jungle_leaves",
+    "tints": [
+      {
+        "type": "item_tints:biome",
+        "mode": "foliage"
+      }
+    ]
+  }
+}

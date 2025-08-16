@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/leaf_litter",
+    "tints": [
+      {
+        "type": "item_tints:biome",
+        "mode": "dry_foliage"
+      }
+    ]
+  }
+}
