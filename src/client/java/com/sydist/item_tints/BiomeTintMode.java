@@ -19,5 +19,4 @@ public enum BiomeTintMode implements StringIdentifiable {
     public String asString() {
         return this.id;
     }
-
 }

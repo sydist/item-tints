@@ -1,32 +1,50 @@
 package com.sydist.item_tints;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.client.render.item.tint.ConstantTintSource;
-import net.minecraft.client.render.item.tint.TintSourceTypes;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.dynamic.Codecs;
-import org.jetbrains.annotations.Nullable;
-
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import net.minecraft.client.color.world.BiomeColors;
+import net.minecraft.client.render.item.tint.ConstantTintSource;
 import net.minecraft.client.render.item.tint.TintSource;
+import net.minecraft.client.render.item.tint.TintSourceTypes;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
+import org.jetbrains.annotations.Nullable;
 
-public record BiomeTintSource(BiomeTintMode mode, TintSource fallback) implements TintSource {
-    public static final MapCodec<BiomeTintSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        StringIdentifiable.createCodec(BiomeTintMode::values).fieldOf("mode").forGetter(BiomeTintSource::mode),
-        Codec.withAlternative(TintSourceTypes.CODEC, Codecs.RGB, ConstantTintSource::new).fieldOf("fallback").forGetter(BiomeTintSource::fallback)
-    ).apply(instance, BiomeTintSource::new));
+public record BiomeTintSource(
+    BiomeTintMode mode,
+    TintSource fallback
+) implements TintSource {
+    public static final MapCodec<BiomeTintSource> CODEC =
+        RecordCodecBuilder.mapCodec(instance ->
+            instance
+                .group(
+                    StringIdentifiable.createCodec(BiomeTintMode::values)
+                        .fieldOf("mode")
+                        .forGetter(BiomeTintSource::mode),
+                    Codec.withAlternative(
+                        TintSourceTypes.CODEC,
+                        Codecs.RGB,
+                        ConstantTintSource::new
+                    )
+                        .fieldOf("fallback")
+                        .forGetter(BiomeTintSource::fallback)
+                )
+                .apply(instance, BiomeTintSource::new)
+        );
 
     @Override
-    public int getTint(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity user) {
+    public int getTint(
+        ItemStack stack,
+        @Nullable ClientWorld world,
+        @Nullable LivingEntity user
+    ) {
         if (world == null) {
             return this.fallback.getTint(stack, world, user);
         }
@@ -44,7 +62,11 @@ public record BiomeTintSource(BiomeTintMode mode, TintSource fallback) implement
         return CODEC;
     }
 
-    private int getBiomeTint(BiomeTintMode mode, BlockRenderView world, BlockPos pos) {
+    private int getBiomeTint(
+        BiomeTintMode mode,
+        BlockRenderView world,
+        BlockPos pos
+    ) {
         switch (mode) {
             case GRASS:
                 return BiomeColors.getGrassColor(world, pos);
@@ -56,9 +78,14 @@ public record BiomeTintSource(BiomeTintMode mode, TintSource fallback) implement
                 return BiomeColors.getWaterColor(world, pos);
             case SUGAR_CANE:
                 final int SUGAR_CANE_BLOCK_COLOR = 0x7fc232;
-                return overlayBlend(BiomeColors.getGrassColor(world, pos), SUGAR_CANE_BLOCK_COLOR);
+                return overlayBlend(
+                    BiomeColors.getGrassColor(world, pos),
+                    SUGAR_CANE_BLOCK_COLOR
+                );
             default:
-                throw new IllegalArgumentException("Invalid biome tint mode: " + mode);
+                throw new IllegalArgumentException(
+                    "Invalid biome tint mode: " + mode
+                );
         }
     }
 
